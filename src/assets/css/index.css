@@ -1,4 +1,4 @@
-:root {
+/* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -66,4 +66,72 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+} */
+
+:root {
+  font-family: Teko, sans-serif;
 }
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-size: 62.5%;
+  font-size: 1rem;
+  background-color: #192734;
+  color: #f8ffff;
+}
+
+/*  */
+.container {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+#root {
+  display: grid;
+  grid-template-columns: auto 10fr;
+  /* grid-gap: 10rem; */
+  padding: 0;
+
+  height: 100vh;
+}
+
+.nav-sidebar {
+  background-color: #0d1b2a;
+  padding: 2.4rem 1.2rem;
+  letter-spacing: 1px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: right;
+  font-size: 2.4rem;
+}
+
+.nav-sidebar a {
+  color: #e6ffff;
+  text-decoration: none;
+
+  transition: color 0.2s;
+}
+.nav-sidebar a.active {
+  color: #92ABAB;
+}
+.nav-sidebar a:hover {
+  color: #7E9BB1;
+}
+
+
+.nav-sidebar ul {
+  list-style-type: none;
+}
+
+/* .teko-<uniquifier> {
+  font-family: "Teko", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+} */

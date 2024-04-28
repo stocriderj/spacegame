@@ -5,28 +5,47 @@ There are ship manufacturers:
         - Designation pattern: "UF" followed by hundreds ordered by size:
             Frigate: 100s
             Destroyer: 200s
-            Tactical/Support: 300s
+            Engineering: 300s
+            Auxilary: 400s
 
         - Weaponry:
             Designated by UF followed by weapon type and blah blah
             Railguns/Cannons:
-                UF-R76-1: Generic 76mm cannon dealing 1 HIMR. Base unit for HIMR measurements following the Galactic Treaty
+                UF-R76-1: Generic 76mm cannon dealing 5 HIDR.
+                UF-aC36-1:
+Rapid-firing 36mm autocannon dealing 2 HIDR.
                 
 
         - Ships:
             UF100 - A basic, all-rounder frigate.
-                Weaponry: 2xUF-R76-1
-                Attack: 2
+                Weaponry: 2xUF-R76-1, 2xUF-aC36-1
+                Attack: 14
+                Hull: 64
                 Speed: 50
-                Cost: 100
-                A generic, all-rounder frigate designed by the United Federation. Outfitted with only two UF-R76-1 generic 76mm cannons, this ship's damage output is rather laughable, but it makes up for it with extremely cheap manufacturing costs and a decent cruising speed.
+                Cost: 1000
+                A generic, all-rounder frigate designed by the United Federation. Outfitted with just two UF-R76-1 generic 76mm cannons and two UF-aC36-1 36mm autocannons, each with one the upper deck and one on the keel, this ship's damage output is rather laughable, but it makes up for it with extremely cheap manufacturing costs and a decent cruising speed.
+            UF301 — A small, basic engineering vessel.
+            Weaponry - 1xUF-aC36-1
+            Attack: 2
+            Hull: 30
+            Speed: 75
+            Cost: 1000
+            Actions: Mine, Build
+            Storage: 1000
 
+RESOURCES
+    Irium (E-ree-am), extremely versatile metal, universal currency
+    Iridite, mined from Irioids
 
+BUILDINGS
+    Smelter, smelts 2 iridite into 1 irium
+    Irium Micro-Universe Gateway (IMUG), Allows instantaneous transport of Irium to and from the quantum Irium micro-universe (QIMU). Utilizing the unique properties of Irium, it folds it up into 10 dimensions, allowing it to be stored in a quantum micro-universe accessable from anywhere in the 3D universe, where it can then be unfolded by an IMUG into 3 dimensions to be used again.
 
 
 METRICS
-    Speed: in lightminutes/second
-    Hull HP: in HIMR (Hull Integrity Measurement Rating), equal to the amount of armor necessary to absorb a shot from a generic UF-R76-1.
-    Attack Damage: in HIDR (Hull Integrity Damage Rating), or HIMR dealt per battle cycle.
-    Cost: in Universal Currency or UC
-    
+    Warp Speed: in lightminutes/second
+    Cruise Speed: in megameters/second
+    Hull HP: in HIMR (Hull Integrity Measurement Rating), a universal measurement for hull measurement
+    Attack Damage: in HIDR (Hull Integrity Damage Rating), or HIMR dealt per volley.
+    Cost: in Irium
+    Storage: in m3 cubed

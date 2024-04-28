@@ -1,0 +1,26 @@
+COLOR SCHEME
+
+Primary Color:
+Primary Color: #0d1b2a (Deep Blue)
+Complementary Colors:
+Secondary Color 1: #ffffff (White)
+Secondary Color 2: #e0e1dd (Light Gray)
+Secondary Color 3: #192734 (Dark Blue)
+Accent Color 1: #f9ca24 (Yellow)
+Accent Color 2: #ff3838 (Red)
+Accent Color 3: #04d9ff (Light Blue)
+
+Darkest Shade: #000000 (Black)
+(theme color) Dark Shade 1: #050c15
+Dark Shade 2: #081520
+Dark Shade 3: #0b1e2b
+
+Light w/ Blue Tint: #c1e4ff
+
+disabled color: #92ABAB
+another darker text color: #7E9BB1
+
+(accent/hover?) Light 0: #c1f7ff
+Light Shade 1: #d4fbff
+(Main) Light Shade 2: #e6ffff
+Light Shade 3: #f8ffff

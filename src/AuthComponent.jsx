@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {signIn, signUp, signOut, changeUsername} from "./features/authSlice";
+import {signIn, signUp, changeUsername} from "./features/authSlice";
 
 const AuthComponent = () => {
   const [email, setEmail] = useState("");
