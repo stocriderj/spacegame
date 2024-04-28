@@ -1,0 +1,32 @@
+There are ship manufacturers:
+    United Federation:
+        - General manufacturer
+        - More standard ship design
+        - Designation pattern: "UF" followed by hundreds ordered by size:
+            Frigate: 100s
+            Destroyer: 200s
+            Tactical/Support: 300s
+
+        - Weaponry:
+            Designated by UF followed by weapon type and blah blah
+            Railguns/Cannons:
+                UF-R76-1: Generic 76mm cannon dealing 1 HIMR. Base unit for HIMR measurements following the Galactic Treaty
+                
+
+        - Ships:
+            UF100 - A basic, all-rounder frigate.
+                Weaponry: 2xUF-R76-1
+                Attack: 2
+                Speed: 50
+                Cost: 100
+                A generic, all-rounder frigate designed by the United Federation. Outfitted with only two UF-R76-1 generic 76mm cannons, this ship's damage output is rather laughable, but it makes up for it with extremely cheap manufacturing costs and a decent cruising speed.
+
+
+
+
+METRICS
+    Speed: in lightminutes/second
+    Hull HP: in HIMR (Hull Integrity Measurement Rating), equal to the amount of armor necessary to absorb a shot from a generic UF-R76-1.
+    Attack Damage: in HIDR (Hull Integrity Damage Rating), or HIMR dealt per battle cycle.
+    Cost: in Universal Currency or UC
+    
