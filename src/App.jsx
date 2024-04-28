@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
 import supabase from "./supabase";
+import AuthComponent from "./AuthComponent";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 
-function App() {
+function Sigma() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -30,7 +32,19 @@ function App() {
           </ul>
         </div>
       ))}
+
+      <AuthComponent />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" index element={<Sigma />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
