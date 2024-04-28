@@ -24,3 +24,7 @@ another darker text color: #7E9BB1
 Light Shade 1: #d4fbff
 (Main) Light Shade 2: #e6ffff
 Light Shade 3: #f8ffff
+
+
+GAMEPLAY
+100k pascals is earthlike

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import supabase from "./supabase";
 import AuthComponent from "./AuthComponent";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Map from "./pages/Map";
 import Layout from "./pages/Layout";
 
 function Sigma() {
@@ -47,6 +48,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Sigma />} />
+          <Route path="/map" element={<Map />} />
           <Route path="/fleet" element={<div></div>} />
         </Route>
       </Routes>

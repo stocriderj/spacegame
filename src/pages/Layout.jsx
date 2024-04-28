@@ -11,12 +11,15 @@ function Navbar() {
   }
 
   return (
-    <sidebar className="nav-sidebar">
+    <aside className="nav-sidebar">
       {user ? (
         <nav>
           <ul>
             <li>
               <NavLink to="/">Home</NavLink>
+            </li>
+            <li>
+              <NavLink to="/map">Map</NavLink>
             </li>
             <li>
               <NavLink to="/fleet">Fleet</NavLink>
@@ -30,7 +33,7 @@ function Navbar() {
       <div>
         <a>Log out</a>
       </div>
-    </sidebar>
+    </aside>
   );
 }
 
