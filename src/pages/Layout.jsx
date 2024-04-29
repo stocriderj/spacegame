@@ -24,7 +24,7 @@ function Navbar() {
         <nav>
           <ul>
             <li>
-              <NavLink to="/game/">Home</NavLink>
+              <NavLink to="/game" end>Home</NavLink>
             </li>
             <li>
               <NavLink to="/game/map">Map</NavLink>

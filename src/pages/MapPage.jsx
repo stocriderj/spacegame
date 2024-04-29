@@ -65,7 +65,7 @@ export default function MapPage() {
     return null;
   };
 
-  return (
+  return galaxy ? 
     <MapContainer
       center={[0, 0]}
       zoom={4}
@@ -83,9 +83,8 @@ export default function MapPage() {
         noWrap={true}
       />
 
-      <Marker position={[3, 3]}>
-        <Popup>Iota blah blah</Popup>
-      </Marker>
-    </MapContainer>
-  );
+      {galaxy.map( star => <Marker position={[star.coordinates.x, star.coordinates.y]} key={star.id}>
+        <Popup>{star.name}</Popup>
+      </Marker>)}
+    </MapContainer> : <p>Loading...</p>
 }

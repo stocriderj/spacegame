@@ -36,7 +36,7 @@ function App() {
                 if (!user) {
                   return redirect("/register");
                 }
-                return null;
+                return null
               },
               children: [
                 { index: true, element: <Home /> },
