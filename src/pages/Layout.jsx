@@ -43,7 +43,7 @@ function Navbar() {
           <a onClick={handleSignOut}>Log out</a>
         ) : (
           <>
-            <input
+            {/* <input
               type="email"
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
@@ -54,8 +54,8 @@ function Navbar() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
             />
-            <br />
-            <a onClick={handleSignIn}>Log in</a>
+            <br /> */}
+          <NavLink to="/register">Login/Register</NavLink>
           </>
         )}
       </div>

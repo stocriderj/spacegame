@@ -5,6 +5,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import FleetPage from "./pages/FleetPage";
 import MapPage from "./pages/MapPage";
 import Layout from "./pages/Layout";
+import RegisterPage from "./pages/RegisterPage";
 
 function Home() {
   return<> <AuthComponent /></>
@@ -18,6 +19,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/fleet" element={<FleetPage/>} />
+          <Route path="/register" element={<RegisterPage/>} />
         </Route>
       </Routes>
     </BrowserRouter>
