@@ -2,6 +2,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {getGalaxy} from "../features/galaxySlice";
 import {useEffect} from "react";
 
+import {ImageOverlay, MapContainer, Marker, Popup, useMap} from "react-leaflet";
+
+import GalaxyImg from "../assets/images/galaxy.jpg";
+
 export default function Map() {
   const dispatch = useDispatch();
   const {galaxy, loading, error} = useSelector(state => state.galaxy);
@@ -10,38 +14,7 @@ export default function Map() {
     if (!galaxy) dispatch(getGalaxy());
   }, []);
 
-  console.log(galaxy, loading, error);
-
-  //   useEffect(() => {
-  //     if (galaxy && !loading && !error) {
-  //       for (let i = 0; i < 36; i++) {
-  //         // i = y
-  //         map.push([]);
-  //         console.log(map);
-  //         for (let j = 0; j < 36; j++) {
-  //           // j = x
-  //           console.log(j);
-  //           const starSystem = galaxy.filter(
-  //             starSystem => starSystem.coordinates == [j - 18, i - 18]
-  //           );
-  //           if (starSystem) {
-  //             map[i].push(starSystem);
-  //           } else {
-  //             map[i].push(null);
-  //           }
-  //         }
-  //       }
-
-  //   console.log(map);
-  //     }
-  //   }, [galaxy]);
-
-  /*
-[null, null,null],
-[null, null,null],
-[null, null,null],
-[null, null,null],
-*/
+  //   console.log(galaxy, loading, error);
 
   function render_map() {
     const map = [];
@@ -80,5 +53,41 @@ export default function Map() {
     );
   }
 
-  return <div>{!galaxy ? <p>Loading...</p> : render_map()}</div>;
+  //   return <div>{!galaxy ? <p>Loading...</p> : render_map()}</div>;
+
+  const imageBounds = [
+    [90, -90],
+    [-90, 90],
+  ]; // Update this based on your image's geographical bounds
+
+  const SetBounds = ({bounds}) => {
+    const map = useMap();
+    map.setMaxBounds(bounds);
+    map.setMinZoom(map.getBoundsZoom(bounds, false));
+    return null;
+  };
+
+  return (
+    <MapContainer
+      center={[0, 0]}
+      zoom={4}
+      minZoom={2}
+      maxZoom={4}
+      scrollWheelZoom={true}
+    >
+      <SetBounds bounds={imageBounds} />
+      <ImageOverlay
+        url={GalaxyImg}
+        bounds={[
+          [90, -180],
+          [-90, 180],
+        ]}
+        noWrap={true}
+      />
+
+      <Marker position={[3, 3]}>
+        <Popup>Iota blah blah</Popup>
+      </Marker>
+    </MapContainer>
+  );
 }
