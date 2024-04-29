@@ -24,13 +24,13 @@ function Navbar() {
         <nav>
           <ul>
             <li>
-              <NavLink to="/">Home</NavLink>
+              <NavLink to="/game/">Home</NavLink>
             </li>
             <li>
-              <NavLink to="/map">Map</NavLink>
+              <NavLink to="/game/map">Map</NavLink>
             </li>
             <li>
-              <NavLink to="/fleet">Fleet</NavLink>
+              <NavLink to="/game/fleet">Fleet</NavLink>
             </li>
           </ul>
         </nav>
