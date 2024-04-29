@@ -6,7 +6,7 @@ import {ImageOverlay, MapContainer, Marker, Popup, useMap} from "react-leaflet";
 
 import GalaxyImg from "../assets/images/galaxy.jpg";
 
-export default function Map() {
+export default function MapPage() {
   const dispatch = useDispatch();
   const {galaxy, loading, error} = useSelector(state => state.galaxy);
 
@@ -52,8 +52,6 @@ export default function Map() {
       </ul>
     );
   }
-
-  //   return <div>{!galaxy ? <p>Loading...</p> : render_map()}</div>;
 
   const imageBounds = [
     [90, -90],
