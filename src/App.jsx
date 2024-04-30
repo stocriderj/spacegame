@@ -33,7 +33,7 @@ function App() {
             {
               path: "/game",
               loader: async () => {
-                if (!user) {
+                if (!user && user !== null) {
                   return redirect("/register");
                 } else {
                   return <div>Loading...</div>;
