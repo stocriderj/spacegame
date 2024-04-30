@@ -84,7 +84,8 @@ function generateStarName() {
   ];
   const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
   const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
-  return `${prefix} ${suffix}`;
+  const designation = `${Math.round(Math.random() * 10)}${Math.round(Math.random() * 10)}${Math.round(Math.random() * 10)}${Math.round(Math.random() * 10)}`;
+  return `${prefix} ${suffix} ${designation}`;
 }
 
 function getRandomSpectralClass() {
@@ -98,7 +99,7 @@ function getAttributeBySpectralClass(spectralClass, attribute) {
   return Math.random() * (max - min) + min;
 }
 
-function generateStar() {
+export function generateStar() {
   const name = generateStarName();
   const spectralClass = getRandomSpectralClass();
   const temperature = getAttributeBySpectralClass(spectralClass, "temperature");
@@ -112,7 +113,7 @@ function generateStar() {
   };
 }
 
-function generatePlanets() {
+export function generatePlanets() {
   const planets = [];
   const planetDensity = Math.random();
 
@@ -123,7 +124,7 @@ function generatePlanets() {
       const type = types[Math.floor(Math.random() * types.length)];
 
       let pressure;
-      iridite = type === "Gaseous" ? 0 : Math.round(Math.random() * 100000);
+      const iridite = type === "Gaseous" ? 0 : Math.round(Math.random() * 100000);
       switch (type) {
         case "Gaseous":
           pressure = Math.random() * 1000000 + 100000;
