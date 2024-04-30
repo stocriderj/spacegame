@@ -124,7 +124,8 @@ export function generatePlanets() {
       const type = types[Math.floor(Math.random() * types.length)];
 
       let pressure;
-      const iridite = type === "Gaseous" ? 0 : Math.round(Math.random() * 100000);
+      const iridite =
+        type === "Gaseous" ? 0 : Math.round(Math.random() * 100000);
       switch (type) {
         case "Gaseous":
           pressure = Math.random() * 1000000 + 100000;

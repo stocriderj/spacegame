@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 import store from "./store.js";
-import {getUser} from "./features/authSlice.js";
+import { getUser } from "./features/authSlice.js";
+import { getGalaxy } from "./features/galaxySlice.js";
 
 import "leaflet/dist/leaflet.css";
 import "./assets/css/index.css";
@@ -11,6 +12,7 @@ import "./assets/css/index.css";
 import seed from "./scripts/seedGalaxy.js";
 
 store.dispatch(getUser(false));
+store.dispatch(getGalaxy());
 
 // seed()
 
@@ -19,5 +21,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

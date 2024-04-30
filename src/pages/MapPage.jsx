@@ -1,8 +1,15 @@
-import {useDispatch, useSelector} from "react-redux";
-import {getGalaxy} from "../features/galaxySlice";
-import {useEffect} from "react";
-import {ImageOverlay, MapContainer, Marker, Popup, useMap} from "react-leaflet";
-import {Icon} from "leaflet";
+import { useDispatch, useSelector } from "react-redux";
+import { getGalaxy } from "../features/galaxySlice";
+import { useEffect } from "react";
+import {
+  ImageOverlay,
+  MapContainer,
+  Marker,
+  Popup,
+  useMap,
+} from "react-leaflet";
+import { Icon } from "leaflet";
+import {Link} from "../components/Links";
 
 // images
 import BlueStar from "../assets/images/stars/blue.png";
@@ -16,13 +23,13 @@ import GalaxyImg from "../assets/images/galaxy.jpg";
 
 // star icons
 const starIconsBlueprint = [
-  {name: "Blue", img: BlueStar},
-  {name: "Blue-White", img: BlueWhiteStar},
-  {name: "White", img: WhiteStar},
-  {name: "White-Yellow", img: WhiteYellowStar},
-  {name: "Yellow", img: YellowStar},
-  {name: "Orange", img: OrangeStar},
-  {name: "Red", img: RedStar},
+  { name: "Blue", img: BlueStar },
+  { name: "Blue-White", img: BlueWhiteStar },
+  { name: "White", img: WhiteStar },
+  { name: "White-Yellow", img: WhiteYellowStar },
+  { name: "Yellow", img: YellowStar },
+  { name: "Orange", img: OrangeStar },
+  { name: "Red", img: RedStar },
 ];
 const starIcons = {};
 for (let icon of starIconsBlueprint) {
@@ -34,11 +41,7 @@ for (let icon of starIconsBlueprint) {
 
 export default function MapPage() {
   const dispatch = useDispatch();
-  const {galaxy, loading, error} = useSelector(state => state.galaxy);
-
-  useEffect(() => {
-    if (!galaxy) dispatch(getGalaxy());
-  }, []);
+  const { galaxy, loading, error } = useSelector((state) => state.galaxy);
 
   //   console.log(galaxy, loading, error);
 
@@ -47,7 +50,7 @@ export default function MapPage() {
     [-90, 90],
   ]; // Update this based on your image's geographical bounds
 
-  const SetBounds = ({bounds}) => {
+  const SetBounds = ({ bounds }) => {
     const map = useMap();
     map.setMaxBounds(bounds);
     map.setMinZoom(map.getBoundsZoom(bounds, false));
@@ -72,13 +75,13 @@ export default function MapPage() {
         noWrap={true}
       />
 
-      {galaxy.map(starSys => (
+      {galaxy.map((starSys) => (
         <Marker
           position={[starSys.coordinates.x, starSys.coordinates.y]}
           icon={starIcons[starSys.star.color]}
           key={starSys.id}
         >
-          <Popup>{starSys.name}</Popup>
+          <Popup><p>{starSys.name}</p><p><Link to={starSys.id}>Click</Link></p</Popup>
         </Marker>
       ))}
     </MapContainer>
