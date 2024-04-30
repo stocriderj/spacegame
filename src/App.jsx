@@ -10,18 +10,18 @@ import FleetPage from "./pages/FleetPage";
 import MapPage from "./pages/MapPage";
 import Layout from "./pages/Layout";
 import RegisterPage from "./pages/RegisterPage";
+import HomePage from "./pages/HomePage";
 
 function Home() {
   return (
-    <>
-      {" "}
+    <main className="main container">
       <AuthComponent />
-    </>
+    </main>
   );
 }
 
 function App() {
-  const { user } = useSelector((state) => state.auth);
+  const {user} = useSelector(state => state.auth);
 
   return (
     <RouterProvider
@@ -35,17 +35,18 @@ function App() {
               loader: async () => {
                 if (!user) {
                   return redirect("/register");
+                } else {
+                  return <div>Loading...</div>;
                 }
-                return null
               },
               children: [
-                { index: true, element: <Home /> },
-                { path: "/game/map", element: <MapPage /> },
-                { path: "/game/fleet", element: <FleetPage /> },
+                {index: true, element: <Home />},
+                {path: "/game/map", element: <MapPage />},
+                {path: "/game/fleet", element: <FleetPage />},
               ],
             },
-            {path: "/", element: <RegisterPage/>},
-            { path: "/register", element: <RegisterPage /> },
+            {path: "/", element: <HomePage />},
+            {path: "/register", element: <RegisterPage />},
           ],
         },
       ])}

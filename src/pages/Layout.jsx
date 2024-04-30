@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { signIn, signUp, signOut, changeUsername } from "../features/authSlice";
+import {useState} from "react";
+import {NavLink} from "../components/Links";
+import {Outlet} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {signIn, signUp, signOut, changeUsername} from "../features/authSlice";
 
 function Navbar() {
   const dispatch = useDispatch();
-  const { user, loading, error } = useSelector((state) => state.auth);
+  const {user, loading, error} = useSelector(state => state.auth);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,42 +21,35 @@ function Navbar() {
 
   return (
     <aside className="nav-sidebar">
-      {user ? (
-        <nav>
-          <ul>
-            <li>
-              <NavLink to="/game" end>Home</NavLink>
-            </li>
-            <li>
-              <NavLink to="/game/map">Map</NavLink>
-            </li>
-            <li>
-              <NavLink to="/game/fleet">Fleet</NavLink>
-            </li>
-          </ul>
-        </nav>
-      ) : (
-        <div></div>
-      )}
+      <nav>
+        <ul>
+          <li>
+            <NavLink to="/">Home</NavLink>
+          </li>
+          {user && (
+            <>
+              <li>
+                <NavLink to="/game" end>
+                  Empire
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/game/map">Map</NavLink>
+              </li>
+              <li>
+                <NavLink to="/game/fleet">Fleet</NavLink>
+              </li>
+            </>
+          )}
+        </ul>
+      </nav>
 
       <div>
         {user ? (
           <a onClick={handleSignOut}>Log out</a>
         ) : (
           <>
-            {/* <input
-              type="email"
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-            />
-            <br />
-            <input
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-            />
-            <br /> */}
-          <NavLink to="/register">Login/Register</NavLink>
+            <NavLink to="/register">Login</NavLink>
           </>
         )}
       </div>
@@ -67,7 +61,7 @@ export default function Layout() {
   return (
     <>
       <Navbar />
-      <main className="main container">
+      <main className="main">
         <Outlet />
       </main>
     </>

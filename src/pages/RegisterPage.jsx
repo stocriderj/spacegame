@@ -29,7 +29,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div>
+    <div className="container">
       {user ? (
         <div>
           <p>
@@ -53,7 +53,8 @@ export default function RegisterPage() {
             type="text"
             placeholder="Username"
             value={username}
-            onChange={e => setUsername(e.target.value)}/>
+            onChange={e => setUsername(e.target.value)}
+          />
           <input
             type="email"
             placeholder="Email"
@@ -75,4 +76,4 @@ export default function RegisterPage() {
       {error && <p>Error: {error}</p>}
     </div>
   );
-};
+}
