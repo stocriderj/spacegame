@@ -12,6 +12,7 @@ import Layout from "./pages/Layout";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import StarSystemPage from "./pages/StarSystemPage";
+import PlanetPage from "./pages/PlanetPage";
 
 function Home() {
   return (
@@ -22,7 +23,7 @@ function Home() {
 }
 
 function App() {
-  const {user} = useSelector(state => state.auth);
+  const {user, loading} = useSelector(state => state.auth);
 
   return (
     <RouterProvider
@@ -34,7 +35,7 @@ function App() {
             {
               path: "/game",
               loader: async () => {
-                if (!user && user !== null) {
+                if (!user && !loading) {
                   return redirect("/register");
                 } else {
                   return <div>Loading...</div>;
@@ -44,7 +45,8 @@ function App() {
                 {index: true, element: <Home />},
                 {path: "/game/map", element: <MapPage />},
                 {path: "/game/fleet", element: <FleetPage />},
-                {path: "/game/star/:starId", element: <StarSystemPage/>}
+                {path: "/game/star/:starId", element: <StarSystemPage />},
+                {path: "/game/star/:starId/:orbitId", element: <PlanetPage />},
               ],
             },
             {path: "/", element: <HomePage />},

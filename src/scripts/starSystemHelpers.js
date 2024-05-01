@@ -113,7 +113,7 @@ export function generateStar() {
   };
 }
 
-export function generatePlanets() {
+export function generatePlanets(star) {
   const planets = [];
   const planetDensity = Math.random();
 
@@ -144,10 +144,14 @@ export function generatePlanets() {
           pressure = 0;
       }
 
-      const radius = Math.random() * 99900 + 100;
+      const radius =
+        type === "Gaseous"
+          ? Math.random() * 100000 + 50000
+          : Math.random() * 49000 + 1000;
 
       planets.push({
         type,
+        name: `${star.name} ${i + 1}`,
         pressure: Math.round(pressure),
         radius: Math.round(radius),
         iridite,
@@ -162,5 +166,5 @@ export function generatePlanets() {
 
 const star = generateStar();
 console.log(star);
-const planets = generatePlanets();
+const planets = generatePlanets(star);
 console.log(planets);

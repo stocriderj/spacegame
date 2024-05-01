@@ -44,7 +44,7 @@ export default async function seed() {
     const star = generateStar();
     const starSystem = {
       star,
-      planets: generatePlanets(),
+      planets: generatePlanets(star),
       name: star.name,
       coordinates,
     };

@@ -1,47 +1,25 @@
-import { useDispatch, useSelector } from "react-redux";
-import { getGalaxy } from "../features/galaxySlice";
-import { useEffect } from "react";
-import {
-  ImageOverlay,
-  MapContainer,
-  Marker,
-  Popup,
-  useMap,
-} from "react-leaflet";
-import { Icon } from "leaflet";
+import {useDispatch, useSelector} from "react-redux";
+import {getGalaxy} from "../features/galaxySlice";
+import {useEffect} from "react";
+import {ImageOverlay, MapContainer, Marker, Popup, useMap} from "react-leaflet";
+import {Icon} from "leaflet";
 import {Link} from "../components/Links";
 
-// images
-import BlueStar from "../assets/images/stars/blue.png";
-import BlueWhiteStar from "../assets/images/stars/blue-white.png";
-import WhiteStar from "../assets/images/stars/white.png";
-import WhiteYellowStar from "../assets/images/stars/white-yellow.png";
-import YellowStar from "../assets/images/stars/yellow.png";
-import OrangeStar from "../assets/images/stars/orange.png";
-import RedStar from "../assets/images/stars/red.png";
 import GalaxyImg from "../assets/images/galaxy.jpg";
+import {starImages} from "../assets/images/imageHelpers";
 
-// star icons
-const starIconsBlueprint = [
-  { name: "Blue", img: BlueStar },
-  { name: "Blue-White", img: BlueWhiteStar },
-  { name: "White", img: WhiteStar },
-  { name: "White-Yellow", img: WhiteYellowStar },
-  { name: "Yellow", img: YellowStar },
-  { name: "Orange", img: OrangeStar },
-  { name: "Red", img: RedStar },
-];
 const starIcons = {};
-for (let icon of starIconsBlueprint) {
-  starIcons[icon.name] = new Icon({
-    iconUrl: icon.img,
+for (let star in starImages) {
+  starIcons[star] = new Icon({
+    iconUrl: starImages[star],
     iconSize: [38, 38],
   });
 }
+// export {starIcons};
 
 export default function MapPage() {
   const dispatch = useDispatch();
-  const { galaxy, loading, error } = useSelector((state) => state.galaxy);
+  const {galaxy, loading, error} = useSelector(state => state.galaxy);
 
   //   console.log(galaxy, loading, error);
 
@@ -50,12 +28,14 @@ export default function MapPage() {
     [-90, 90],
   ]; // Update this based on your image's geographical bounds
 
-  const SetBounds = ({ bounds }) => {
+  const SetBounds = ({bounds}) => {
     const map = useMap();
     map.setMaxBounds(bounds);
     map.setMinZoom(map.getBoundsZoom(bounds, false));
     return null;
   };
+
+  console.log(galaxy);
 
   return galaxy ? (
     <MapContainer
@@ -69,19 +49,29 @@ export default function MapPage() {
       <ImageOverlay
         url={GalaxyImg}
         bounds={[
-          [90, -180],
-          [-90, 180],
+          [90, 180],
+          [-90, -180],
         ]}
         noWrap={true}
       />
 
-      {galaxy.map((starSys) => (
+      {/* <Marker position={[86, 180]}>test</Marker> */}
+
+      {galaxy.map(starSys => (
         <Marker
-          position={[starSys.coordinates.x, starSys.coordinates.y]}
+          position={[starSys.coordinates.y * 0.86, starSys.coordinates.x * 1.8]}
           icon={starIcons[starSys.star.color]}
           key={starSys.id}
         >
-          <Popup><p>{starSys.name}</p><p><Link to={starSys.id}>Click</Link></p</Popup>
+          <Popup>
+            <p>{starSys.name}</p>
+            <p>
+              ({starSys.coordinates.x}, {starSys.coordinates.y})
+            </p>
+            <p>
+              <Link to={`/game/star/${starSys.id}`}>Click</Link>
+            </p>
+          </Popup>
         </Marker>
       ))}
     </MapContainer>
