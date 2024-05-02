@@ -28,25 +28,24 @@ const StyledStarSystem = styled.div`
   }
 `;
 
-function StarSystem({starSystem}) {
-  const star = starSystem.star;
-  const planets = starSystem.planets;
+function StarSystem({star, planets}) {
+  console.log(star, planets);
   return (
     <StyledStarSystem>
       <Link to="/game/map">&larr; Back to map</Link>
-      <h1>{starSystem.name}</h1>
+      <h1>{star.name}</h1>
 
       <img
         className="star-system-star"
         src={starImages[star.color]}
-        alt={`${star.name}, class ${star.spectralClass} ${star.color}`}
+        alt={`${star.name}, class ${star.spectral_class} ${star.color}`}
       />
 
       {planets.map((planet, orbit) =>
         planet ? (
           <Link
             className="star-system-planet"
-            to={`/game/star/${starSystem.id}/${orbit}`}
+            to={`/game/star/${star.id}/${orbit + 1}`}
             key={orbit}
           >
             <img
@@ -64,23 +63,30 @@ function StarSystem({starSystem}) {
   );
 }
 
-export default function StarSystemPage() {
+export default function StarPage() {
   const dispatch = useDispatch();
   const {starId} = useParams();
-  const {galaxy, loading} = useSelector(state => state.galaxy);
+  const {
+    stars,
+    planets: allPlanets,
+    loading,
+  } = useSelector(state => state.galaxy);
 
-  const starSystem = galaxy
-    ? galaxy.filter(starSys => starSys.id == starId)[0]
+  const star = stars ? stars.filter(star => star.id == starId)[0] : null;
+  const planets = allPlanets
+    ? allPlanets
+        .filter(planet => planet.star_id == starId) // Find planet
+        .sort((a, b) => a.orbit - b.orbit) // Sort in ascending order
     : null;
 
-  console.log(starSystem);
+  console.log(star);
 
   return (
     <div className="container">
       {loading ? (
         <p>Loading...</p>
-      ) : starSystem ? (
-        <StarSystem starSystem={starSystem} />
+      ) : star ? (
+        <StarSystem star={star} planets={planets} />
       ) : (
         <div>Star not found</div>
       )}

@@ -11,7 +11,7 @@ import MapPage from "./pages/MapPage";
 import Layout from "./pages/Layout";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
-import StarSystemPage from "./pages/StarSystemPage";
+import StarPage from "./pages/StarPage";
 import PlanetPage from "./pages/PlanetPage";
 
 function Home() {
@@ -45,7 +45,7 @@ function App() {
                 {index: true, element: <Home />},
                 {path: "/game/map", element: <MapPage />},
                 {path: "/game/fleet", element: <FleetPage />},
-                {path: "/game/star/:starId", element: <StarSystemPage />},
+                {path: "/game/star/:starId", element: <StarPage />},
                 {path: "/game/star/:starId/:orbitId", element: <PlanetPage />},
               ],
             },

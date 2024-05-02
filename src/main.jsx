@@ -9,7 +9,7 @@ import { getGalaxy } from "./features/galaxySlice.js";
 import "leaflet/dist/leaflet.css";
 import "./assets/css/index.css";
 
-// import seed from "./scripts/seedGalaxy.js";
+import seed from "./scripts/seedGalaxy.js";
 
 store.dispatch(getUser(false));
 store.dispatch(getGalaxy());

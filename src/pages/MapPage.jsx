@@ -19,9 +19,7 @@ for (let star in starImages) {
 
 export default function MapPage() {
   const dispatch = useDispatch();
-  const {galaxy, loading, error} = useSelector(state => state.galaxy);
-
-  //   console.log(galaxy, loading, error);
+  const {stars, loading, error} = useSelector(state => state.galaxy);
 
   const imageBounds = [
     [90, -90],
@@ -35,13 +33,13 @@ export default function MapPage() {
     return null;
   };
 
-  console.log(galaxy);
+  console.log(stars);
 
-  return galaxy ? (
+  return stars ? (
     <MapContainer
       center={[0, 0]}
-      zoom={4}
-      minZoom={0}
+      zoom={2}
+      minZoom={1}
       maxZoom={4}
       scrollWheelZoom={true}
     >
@@ -57,19 +55,19 @@ export default function MapPage() {
 
       {/* <Marker position={[86, 180]}>test</Marker> */}
 
-      {galaxy.map(starSys => (
+      {stars.map(star => (
         <Marker
-          position={[starSys.coordinates.y * 0.86, starSys.coordinates.x * 1.8]}
-          icon={starIcons[starSys.star.color]}
-          key={starSys.id}
+          position={[star.coordinates.y * 0.86, star.coordinates.x * 1.8]}
+          icon={starIcons[star.color]}
+          key={star.id}
         >
           <Popup>
-            <p>{starSys.name}</p>
+            <p>{star.name}</p>
             <p>
-              ({starSys.coordinates.x}, {starSys.coordinates.y})
+              ({star.coordinates.x}, {star.coordinates.y})
             </p>
             <p>
-              <Link to={`/game/star/${starSys.id}`}>Click</Link>
+              <Link to={`/game/star/${star.id}`}>Click</Link>
             </p>
           </Popup>
         </Marker>

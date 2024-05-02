@@ -19,13 +19,10 @@ const StyledPlanet = styled.div`
   }
 `;
 
-function Planet({starSystem, planet}) {
-  console.log(planet);
+function Planet({star, planet}) {
   return (
     <StyledPlanet>
-      <Link to={`/game/star/${starSystem.id}`}>
-        &larr; Back to {starSystem.name}
-      </Link>
+      <Link to={`/game/star/${star.id}`}>&larr; Back to {star.name}</Link>
       <h1>{planet.name}</h1>
 
       <img
@@ -36,8 +33,13 @@ function Planet({starSystem, planet}) {
 
       <ul>
         <li>Type: {planet.type}</li>
-        <li>Atmospheric Pressure: {planet.pressure} pascals</li>
-        <li>Radius: {planet.radius} km</li>
+        {/* Doesn't display these for space dust and empty space */}
+        {["Space Dust", "Empty Space"].indexOf(planet.type) < 0 && (
+          <>
+            <li>Atmospheric Pressure: {planet.pressure} pascals</li>
+            <li>Radius: {planet.radius} km</li>
+          </>
+        )}
         <li>Iridite: {planet.iridite}</li>
       </ul>
     </StyledPlanet>
@@ -46,19 +48,22 @@ function Planet({starSystem, planet}) {
 
 export default function PlanetPage() {
   const {starId, orbitId} = useParams();
-  const {galaxy, loading} = useSelector(state => state.galaxy);
+  const {stars, planets, loading} = useSelector(state => state.galaxy);
 
-  const starSystem = galaxy
-    ? galaxy.filter(starSys => starSys.id == starId)[0]
+  const star = stars ? stars.filter(star => star.id == starId)[0] : null;
+  const planet = planets
+    ? planets.filter(
+        planet => planet.star_id == starId && planet.orbit == orbitId
+      )[0]
     : null;
-  const planet = starSystem?.planets[parseInt(orbitId)];
+  console.log(planet);
 
   return (
     <div className="container">
       {loading ? (
         <p>Loading...</p>
       ) : planet ? (
-        <Planet starSystem={starSystem} planet={planet} />
+        <Planet star={star} planet={planet} />
       ) : (
         <div>Planet not found</div>
       )}

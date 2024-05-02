@@ -2,7 +2,8 @@ import {createSlice} from "@reduxjs/toolkit";
 import supabase from "../supabase";
 
 const initialState = {
-  galaxy: null,
+  stars: null,
+  planets: null,
   loading: false,
   error: null,
 };
@@ -11,9 +12,12 @@ const galaxySlice = createSlice({
   name: "galaxy",
   initialState,
   reducers: {
-    setGalaxy(state, action) {
-      state.galaxy = action.payload;
-      state.loading = false;
+    setStars(state, action) {
+      state.stars = action.payload;
+      state.error = null;
+    },
+    setPlanets(state, action) {
+      state.planets = action.payload;
       state.error = null;
     },
     setLoading(state, action) {
@@ -21,12 +25,11 @@ const galaxySlice = createSlice({
     },
     setError(state, action) {
       state.error = action.payload;
-      state.loading = false;
     },
   },
 });
 
-export const {setGalaxy, setLoading, setError} = galaxySlice.actions;
+export const {setStars, setPlanets, setLoading, setError} = galaxySlice.actions;
 
 export const getGalaxy = () => async dispatch => {
   dispatch(setLoading(true));
@@ -35,10 +38,23 @@ export const getGalaxy = () => async dispatch => {
     if (error) {
       throw error;
     }
-    dispatch(setGalaxy(data));
+    dispatch(setStars(data));
   } catch (error) {
     dispatch(setError(error.message));
+    console.error(error);
   }
+
+  try {
+    let {data, error} = await supabase.from("planets").select("*");
+    if (error) {
+      throw error;
+    }
+    dispatch(setPlanets(data));
+  } catch (error) {
+    dispatch(setError(error.message));
+    console.error(error);
+  }
+  dispatch(setLoading(false));
 };
 
 export default galaxySlice.reducer;
