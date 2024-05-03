@@ -2,7 +2,7 @@ import {useState} from "react";
 import {NavLink} from "../components/Links";
 import {Outlet} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {signIn, signUp, signOut, changeUsername} from "../features/authSlice";
+import {signIn, signOut} from "../features/authSlice";
 
 function Navbar() {
   const dispatch = useDispatch();

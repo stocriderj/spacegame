@@ -1,23 +1,34 @@
 import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {signIn, signUp, changeUsername} from "../features/authSlice";
+import {signIn, signUp, signOut} from "../features/authSlice";
+import {changeUsername} from "../features/userSlice";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [nationName, setNationName] = useState("");
+  const [nationDenon, setNationDenon] = useState("");
   const dispatch = useDispatch();
   const {user, loading, error} = useSelector(state => state.auth);
-  const data = useSelector(state => state.auth);
-
-  console.log(data);
+  const {users} = useSelector(state => state.user);
+  const authUser = users ? users.filter(u => u.user_id == user.u) : null;
+  console.log(user);
 
   const handleSignIn = () => {
     dispatch(signIn(email, password));
   };
 
   const handleSignUp = () => {
-    dispatch(signUp(username, email, password));
+    dispatch(
+      signUp({
+        username,
+        nation_name: nationName,
+        nation_denonym: nationDenon,
+        email,
+        password,
+      })
+    );
   };
 
   const handleSignOut = () => {
@@ -54,6 +65,18 @@ export default function RegisterPage() {
             placeholder="Username"
             value={username}
             onChange={e => setUsername(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Nation Name"
+            value={nationName}
+            onChange={e => setNationName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Nation Denonym (What will your people be referred to as?)"
+            value={nationDenon}
+            onChange={e => setNationDenon(e.target.value)}
           />
           <input
             type="email"

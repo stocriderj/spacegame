@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signIn, signUp, signOut, changeUsername } from "./features/authSlice";
+import {signIn, signUp, signOut} from "./features/authSlice";
 
 const AuthComponent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const dispatch = useDispatch();
-  const { user, loading, error } = useSelector((state) => state.auth);
-  const data = useSelector((state) => state.auth);
+  const {user, loading, error} = useSelector(state => state.auth);
+  const data = useSelector(state => state.auth);
 
   console.log(data);
 
@@ -24,10 +24,6 @@ const AuthComponent = () => {
     dispatch(signOut());
   };
 
-  const handleChangeUsername = () => {
-    dispatch(changeUsername(username));
-  };
-
   return (
     <div>
       {user ? (
@@ -41,9 +37,8 @@ const AuthComponent = () => {
             type="text"
             placeholder="Username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={e => setUsername(e.target.value)}
           />
-          <button onClick={handleChangeUsername}>Change Username</button>
           <br />
           <button onClick={handleSignOut}>Sign Out</button>
         </div>
@@ -53,13 +48,13 @@ const AuthComponent = () => {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
           />
 
           <button onClick={handleSignIn}>Sign In</button>

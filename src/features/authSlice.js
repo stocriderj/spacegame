@@ -51,26 +51,41 @@ export const signIn = (email, password) => async dispatch => {
   }
 };
 
-export const signUp = (username, email, password) => async dispatch => {
-  dispatch(setLoading(true));
-  try {
-    const {user, error} = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          username,
+export const signUp =
+  ({username, nation_name, nation_denonym, email, password}) =>
+  async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      const {data: user, error: authError} = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            username,
+            nation_name,
+            nation_denonym,
+          },
         },
-      },
-    });
-    if (error) {
-      throw error;
+      });
+      if (authError) {
+        throw authError;
+      }
+      console.log("returned User:", user);
+      console.log("id of User:", user.user.id);
+      // const {error: userError} = await supabase
+      //   .from("users")
+      //   .insert([
+      //     {id: user.user.id, username, nation_name, nation_denonym, irium: 0},
+      //   ]);
+      // if (userError) {
+      //   throw userError;
+      // }
+      dispatch(setUser(user));
+    } catch (error) {
+      console.error("Error signing up: ", error.message);
+      dispatch(setError(error.message));
     }
-    dispatch(setUser(user));
-  } catch (error) {
-    dispatch(setError(error.message));
-  }
-};
+  };
 
 export const signOut = () => async dispatch => {
   dispatch(setLoading(true));
@@ -101,19 +116,21 @@ export const getUser =
     }
   };
 
-export const changeUsername = username => async dispatch => {
-  dispatch(setLoading(true));
-  try {
-    const {data, error} = await supabase.auth.updateUser({
-      data: {username},
-    });
-    if (error) {
-      throw error;
-    }
-    dispatch(setUser(data));
-  } catch (error) {
-    dispatch(setError(error.message));
-  }
-};
+// export const changeUsername = username => async dispatch => {
+//   dispatch(setLoading(true));
+//   try {
+//     const {data, error} = await supabase.auth.updateUser({
+//       data: {username},
+//     });
+//     if (error) {
+//       throw error;
+//     }
+//     dispatch(setUser(data));
+//   } catch (error) {
+//     dispatch(setError(error.message));
+//   }
+// };
 
 export default authSlice.reducer;
+
+// supabase.auth.admin.deleteUser("00dc72de-78ab-4c48-a103-d4c211db6643");
