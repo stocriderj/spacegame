@@ -35,6 +35,7 @@ export const getUsers = () => async dispatch => {
     if (error) {
       throw error;
     }
+    console.log({data, error})
     dispatch(setUsers(data));
   } catch (error) {
     dispatch(setError(error.message));
@@ -50,11 +51,12 @@ export const changeUsername =
       let {data, error} = await supabase
         .from("users")
         .update({username})
-        .eq("user_id", userId);
+        .eq("id", userId).select("*");
       if (error) {
         throw error;
       }
       console.log("Success updating username, returned: ", data);
+      dispatch(setUsers(data))
     } catch (error) {
       dispatch(setError(error.message));
       console.error(error);
