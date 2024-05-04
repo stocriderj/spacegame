@@ -43,15 +43,23 @@ export const getUsers = () => async dispatch => {
   }
 };
 
-export const changeUsername =
-  ({username, userId}) =>
+/**
+ * Accepts an object and updates the user
+ * 
+ * @param {object} fields an object with updated fields. non-updating fields do not have to be included
+ * @param {uuid} userId the id of the user to edit. must be same as authenticated user
+ * @returns nothing lmao
+ */
+export const updateUser =
+  ({fields, userId}) =>
   async dispatch => {
     dispatch(setLoading(true));
     try {
       let {data, error} = await supabase
         .from("users")
-        .update({username})
-        .eq("id", userId).select("*");
+        .update(fields)
+        .eq("id", userId)
+        .select("*");
       if (error) {
         throw error;
       }

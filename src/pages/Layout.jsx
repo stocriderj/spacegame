@@ -2,18 +2,11 @@ import {useState} from "react";
 import {NavLink} from "../components/Links";
 import {Outlet} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {signIn, signOut} from "../features/authSlice";
+import {signOut} from "../features/authSlice";
 
 function Navbar() {
   const dispatch = useDispatch();
   const {user, loading, error} = useSelector(state => state.auth);
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  function handleSignIn() {
-    dispatch(signIn(email, password));
-  }
 
   function handleSignOut() {
     dispatch(signOut());

@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import AuthComponent from "./AuthComponent";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  redirect,
-} from "react-router-dom";
+import {useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {createBrowserRouter, RouterProvider, redirect} from "react-router-dom";
 import FleetPage from "./pages/FleetPage";
 import MapPage from "./pages/MapPage";
 import Layout from "./pages/Layout";
@@ -14,16 +9,105 @@ import HomePage from "./pages/HomePage";
 import StarPage from "./pages/StarPage";
 import PlanetPage from "./pages/PlanetPage";
 
+import {signOut} from "./features/authSlice";
+import {updateUser} from "./features/userSlice";
+
 function Home() {
+  const [authUser, setAuthUser] = useState(null);
+  const [username, setUsername] = useState("");
+  const [nationName, setNationName] = useState("");
+  const [nationDenon, setNationDenon] = useState("");
+
+  const dispatch = useDispatch();
+  const {user, loading: authLoading, error} = useSelector(state => state.auth);
+  const {users, loading: usersLoading} = useSelector(state => state.user);
+
+  useEffect(() => {
+    console.log("effect");
+    if (!usersLoading && users) {
+      console.log("if state");
+      const foundUser = users.find(u => u.id == user.user.id);
+      console.log("found", foundUser);
+      if (foundUser) {
+        setAuthUser(foundUser);
+        setUsername(foundUser.username);
+        setNationName(foundUser.nation_name);
+        setNationDenon(foundUser.nation_denonym);
+      }
+    }
+  }, [users, usersLoading]);
+  console.log("all users", users);
+  console.log("authUser", authUser);
+
+  const handleSignOut = () => {
+    dispatch(signOut());
+  };
+
+  function handleUpdateUser() {
+    dispatch(
+      updateUser({
+        fields: {
+          username,
+          nation_name: nationName,
+          nation_denonym: nationDenon,
+        },
+        userId: user.user.id,
+      })
+    );
+  }
+
   return (
     <main className="main container">
-      <AuthComponent />
+      {usersLoading ? (
+        <p>Loading...</p>
+      ) : authUser ? (
+        <div>
+          <p>
+            Welcome, {authUser.username}! Your email is{" "}
+            {user.user.identities[0].email}
+          </p>
+          <p>
+            The {authUser.nation_denonym || "people"} of{" "}
+            {authUser.nation_name || "your nation"} need your guidance.
+          </p>
+          Username
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+          <br />
+          Nation name
+          <input
+            type="text"
+            placeholder="Nation name"
+            value={nationName}
+            onChange={e => setNationName(e.target.value)}
+          />
+          <br />
+          Nation denonym
+          <input
+            type="text"
+            placeholder="Nation denonym"
+            value={nationDenon}
+            onChange={e => setNationDenon(e.target.value)}
+          />
+          <br />
+          <button onClick={handleUpdateUser}>Save changes</button>
+          <button onClick={handleSignOut}>Sign Out</button>
+        </div>
+      ) : (
+        <p>you must login</p>
+      )}
     </main>
   );
 }
 
 function App() {
   const {user, loading} = useSelector(state => state.auth);
+
+  console.log("authenticated user", user);
 
   return (
     <RouterProvider
@@ -50,7 +134,17 @@ function App() {
               ],
             },
             {path: "/", element: <HomePage />},
-            {path: "/register", element: <RegisterPage />},
+            {
+              path: "/register",
+              element: <RegisterPage />,
+              loader: async () => {
+                if (user && !loading) {
+                  return redirect("/game");
+                } else {
+                  return <div>Loading...</div>;
+                }
+              },
+            },
           ],
         },
       ])}
