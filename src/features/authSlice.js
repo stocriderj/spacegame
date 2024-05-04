@@ -116,21 +116,6 @@ export const getUser =
     }
   };
 
-// export const changeUsername = username => async dispatch => {
-//   dispatch(setLoading(true));
-//   try {
-//     const {data, error} = await supabase.auth.updateUser({
-//       data: {username},
-//     });
-//     if (error) {
-//       throw error;
-//     }
-//     dispatch(setUser(data));
-//   } catch (error) {
-//     dispatch(setError(error.message));
-//   }
-// };
-
 export default authSlice.reducer;
 
-// supabase.auth.admin.deleteUser("00dc72de-78ab-4c48-a103-d4c211db6643");
+// supabase.auth.admin.deleteUser("9413cb7e-6b0e-4455-b072-35dd19178b17");

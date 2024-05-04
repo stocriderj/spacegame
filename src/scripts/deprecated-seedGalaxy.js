@@ -1,4 +1,11 @@
-// import { generateStar, generatePlanets } from "./starSystemHelpers";
+/*
+
+
+THIS CODE HAS BEEN MOVED SERVER SIDE AND IS ONLY KEPT FOR REFERENCE
+
+
+*/
+
 import supabase from "../supabase";
 import {randomNumber} from "./helpers";
 
@@ -244,11 +251,6 @@ export function generatePlanets(star) {
 
   return planets;
 }
-
-// const star = generateStar();
-// console.log(star);
-// const planets = generatePlanets(star);
-// console.log(planets);
 
 // -----------------
 

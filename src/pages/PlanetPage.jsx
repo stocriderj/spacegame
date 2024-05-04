@@ -50,11 +50,11 @@ export default function PlanetPage() {
   const {starId, orbitId} = useParams();
   const {stars, planets, loading} = useSelector(state => state.galaxy);
 
-  const star = stars ? stars.filter(star => star.id == starId)[0] : null;
+  const star = stars ? stars.find(star => star.id == starId) : null;
   const planet = planets
-    ? planets.filter(
-        planet => planet.star_id == starId && planet.orbit == orbitId
-      )[0]
+    ? planets.find(
+        planet => planet.star_id == starId && planet.orbit == orbitId - 1
+      )
     : null;
   console.log(planet);
 
