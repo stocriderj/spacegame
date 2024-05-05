@@ -3,6 +3,8 @@ import {useParams} from "react-router-dom";
 import styled from "styled-components";
 import {planetImages, starImages} from "../assets/images/imageHelpers";
 import {Link} from "../components/Links";
+import {useEffect} from "react";
+import {fetchPlanets} from "../features/galaxySlice";
 
 const StyledStarSystem = styled.div`
   margin: 0 auto;
@@ -12,6 +14,7 @@ const StyledStarSystem = styled.div`
   gap: 2.4rem;
   flex-direction: column;
   align-items: center;
+  font-size: 1.2rem;
 
   & .star-system-star {
     position: relative;
@@ -23,8 +26,21 @@ const StyledStarSystem = styled.div`
     min-width: 5%;
     max-width: min(100%, 16rem);
   }
-  & .star-system-planet p {
-    margin-top: -1rem;
+
+  /* captions */
+  & .star-system-planet-owner {
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-decoration: underline;
+  }
+  & .star-system-planet-name {
+    margin-top: -0.6rem;
+    letter-spacing: 2px;
+    font-size: 1.6rem;
+  }
+  & .star-system-empty-space .star-system-planet-name {
+    font-size: 2.4rem;
+    margin: 10% auto;
   }
 `;
 
@@ -44,16 +60,31 @@ function StarSystem({star, planets}) {
       {planets.map((planet, orbit) =>
         planet ? (
           <Link
-            className="star-system-planet"
+            className={`star-system-planet  ${
+              planet.type == "Empty Space" ? "star-system-empty-space" : ""
+            }`}
             to={`/game/star/${star.id}/${orbit + 1}`}
             key={orbit}
           >
-            <img
-              src={planetImages[planet.type]}
-              alt="Picture of the planet"
-              style={{width: `${planet.radius / 5000 + 5}rem`}}
-            />
-            <p>{planet.name}</p>
+            {planet.type != "Empty Space" && (
+              <>
+                <img
+                  src={planetImages[planet.type]}
+                  alt="Picture of the planet"
+                  style={{width: `${planet.radius / 5000 + 5}rem`}}
+                />
+              </>
+            )}
+
+            <div className="star-system-planet-details">
+              {["Empty Space", "Space Dust"].indexOf(planet.type) < 0 && (
+                <p className="star-system-planet-owner">
+                  {planet.users?.username || "Unclaimed"}
+                </p>
+              )}
+
+              <p className="star-system-planet-name">{planet.name}</p>
+            </div>
           </Link>
         ) : (
           <p key={orbit}>-</p>
@@ -65,28 +96,38 @@ function StarSystem({star, planets}) {
 
 export default function StarPage() {
   const dispatch = useDispatch();
+
   const {starId} = useParams();
+
   const {
     stars,
-    planets: allPlanets,
+    fetchedPlanets: planets,
     loading,
+    error,
   } = useSelector(state => state.galaxy);
 
-  const star = stars ? stars.filter(star => star.id == starId)[0] : null;
-  const planets = allPlanets
-    ? allPlanets
-        .filter(planet => planet.star_id == starId) // Find planet
-        .sort((a, b) => a.orbit - b.orbit) // Sort in ascending order
-    : null;
+  const star = stars ? stars.find(star => star.id == starId) : null;
+
+  // FETCH PLANETS
+  useEffect(() => {
+    if (star && star?.id != planets?.starId) dispatch(fetchPlanets(star.id));
+  }, [dispatch, star, planets]);
 
   console.log(star);
 
+  if (loading) return <p>Loading...</p>;
+
   return (
     <div className="container">
-      {loading ? (
-        <p>Loading...</p>
-      ) : star ? (
-        <StarSystem star={star} planets={planets} />
+      {error ? (
+        <>
+          <h1>ERROR {error.code}</h1>
+          <h2>{error.details}</h2>
+          <p>{error.message}</p>
+          <p>Hint: {error.hint || "none"}</p>
+        </>
+      ) : star && planets?.planets ? (
+        <StarSystem star={star} planets={planets.planets} />
       ) : (
         <div>Star not found</div>
       )}

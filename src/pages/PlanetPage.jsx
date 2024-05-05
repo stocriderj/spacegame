@@ -1,14 +1,15 @@
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 import styled from "styled-components";
 import {planetImages} from "../assets/images/imageHelpers";
 import {Link} from "../components/Links";
+import {useEffect} from "react";
+import {fetchPlanets} from "../features/galaxySlice";
 
 const StyledPlanet = styled.div`
   margin: 0 auto;
   width: fit-content;
   display: flex;
-  gap: 2.4rem;
   flex-direction: column;
   align-items: center;
 
@@ -17,19 +18,40 @@ const StyledPlanet = styled.div`
     top: 0;
     width: 100%;
   }
+
+  & .planet-title {
+    text-align: center;
+  }
+
+  & h1 {
+    margin-top: 1.2rem;
+    margin-bottom: -1rem;
+    font-size: 3.6rem;
+    text-decoration: dashed underline;
+  }
 `;
 
-function Planet({star, planet}) {
+function Planet({star, planet, owner: ownerProp}) {
+  const owner = ownerProp ? ownerProp : {username: "Unclaimed"};
+
   return (
     <StyledPlanet>
       <Link to={`/game/star/${star.id}`}>&larr; Back to {star.name}</Link>
-      <h1>{planet.name}</h1>
 
-      <img
-        className="planet-img"
-        src={planetImages[planet.type]}
-        alt="Image of the planet"
-      />
+      <div className="planet-title">
+        <h1>{planet.name}</h1>
+        {["Space Dust", "Empty Space"].indexOf(planet.type) < 0 && (
+          <h2>{ownerProp ? `Owner: ${owner?.username}` : "Unclaimed"}</h2>
+        )}
+      </div>
+
+      {planet.type != "Empty Space" && (
+        <img
+          className="planet-img"
+          src={planetImages[planet.type]}
+          alt="Image of the planet"
+        />
+      )}
 
       <ul>
         <li>Type: {planet.type}</li>
@@ -47,23 +69,36 @@ function Planet({star, planet}) {
 }
 
 export default function PlanetPage() {
+  const dispatch = useDispatch();
+
   const {starId, orbitId} = useParams();
-  const {stars, planets, loading} = useSelector(state => state.galaxy);
+
+  const {
+    stars,
+    fetchedPlanets,
+    loading: galaxyLoading,
+  } = useSelector(state => state.galaxy);
 
   const star = stars ? stars.find(star => star.id == starId) : null;
+  const planets = fetchedPlanets?.planets;
   const planet = planets
     ? planets.find(
         planet => planet.star_id == starId && planet.orbit == orbitId - 1
       )
     : null;
-  console.log(planet);
+
+  // FETCH PLANETS
+  useEffect(() => {
+    if (starId && starId != fetchedPlanets?.starId)
+      dispatch(fetchPlanets(starId));
+  }, [dispatch, starId, planets]);
+
+  if (galaxyLoading) return <p>Loading...</p>;
 
   return (
     <div className="container">
-      {loading ? (
-        <p>Loading...</p>
-      ) : planet ? (
-        <Planet star={star} planet={planet} />
+      {planet ? (
+        <Planet star={star} planet={planet} owner={planet.users} />
       ) : (
         <div>Planet not found</div>
       )}

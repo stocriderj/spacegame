@@ -14,7 +14,7 @@ import "./assets/css/index.css";
 
 store.dispatch(getUser(false));
 store.dispatch(getGalaxy());
-store.dispatch(getUsers());
+// store.dispatch(getUsers());
 
 // seed();
 

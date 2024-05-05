@@ -117,5 +117,3 @@ export const getUser =
   };
 
 export default authSlice.reducer;
-
-// supabase.auth.admin.deleteUser("9413cb7e-6b0e-4455-b072-35dd19178b17");

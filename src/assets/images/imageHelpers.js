@@ -23,6 +23,7 @@ import ContinentalImage from "./planets/continental.png";
 import OceanicImage from "./planets/oceanic.png";
 import TerrestrialImage from "./planets/terrestrial.png";
 import IceImage from "./planets/ice.png";
+import SpaceDustImage from "./planets/space-dust.png";
 
 export const planetImages = {
   Gaseous: GaseousImage,
@@ -30,4 +31,5 @@ export const planetImages = {
   Oceanic: OceanicImage,
   Terrestrial: TerrestrialImage,
   Ice: IceImage,
+  "Space Dust": SpaceDustImage,
 };
