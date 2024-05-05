@@ -26,6 +26,7 @@ export const fetchUser = createAsyncThunk(
 
 const initialState = {
   users: null,
+  authUser: null,
   fetchedUser: null,
   loading: false,
   error: null,
@@ -46,6 +47,11 @@ const userSlice = createSlice({
     },
     setError(state, action) {
       state.error = action.payload;
+      state.loading = false;
+    },
+
+    setAuthUser(state, action) {
+      state.authUser = action.payload;
       state.loading = false;
     },
 
@@ -71,7 +77,7 @@ const userSlice = createSlice({
   },
 });
 
-export const {setUsers, setLoading, setError, resetFetchedUser} =
+export const {setUsers, setLoading, setError, resetFetchedUser, setAuthUser} =
   userSlice.actions;
 
 export const getUsers = () => async dispatch => {
@@ -83,6 +89,30 @@ export const getUsers = () => async dispatch => {
     }
     console.log({data, error});
     dispatch(setUsers(data));
+  } catch (error) {
+    dispatch(setError(error.message));
+    console.error(error);
+  }
+};
+
+export const getAuthUser = () => async dispatch => {
+  dispatch(setLoading(true));
+  try {
+    const {
+      data: {user},
+    } = await supabase.auth.getUser();
+
+    let {data, error} = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    dispatch(setAuthUser(data));
   } catch (error) {
     dispatch(setError(error.message));
     console.error(error);
@@ -105,12 +135,14 @@ export const updateUser =
         .from("users")
         .update(fields)
         .eq("id", userId)
-        .select("*");
+        .select("*")
+        .single();
+
       if (error) {
         throw error;
       }
-      console.log("Success updating username, returned: ", data);
-      dispatch(setUsers(data));
+      console.log("Success updating user, returned: ", data);
+      dispatch(setAuthUser(data));
     } catch (error) {
       dispatch(setError(error.message));
       console.error(error);

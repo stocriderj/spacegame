@@ -72,14 +72,6 @@ export const signUp =
       }
       console.log("returned User:", user);
       console.log("id of User:", user.user.id);
-      // const {error: userError} = await supabase
-      //   .from("users")
-      //   .insert([
-      //     {id: user.user.id, username, nation_name, nation_denonym, irium: 0},
-      //   ]);
-      // if (userError) {
-      //   throw userError;
-      // }
       dispatch(setUser(user));
     } catch (error) {
       console.error("Error signing up: ", error.message);

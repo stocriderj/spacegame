@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {createBrowserRouter, RouterProvider, redirect} from "react-router-dom";
 import FleetPage from "./pages/FleetPage";
@@ -13,32 +13,23 @@ import {signOut} from "./features/authSlice";
 import {updateUser} from "./features/userSlice";
 
 function Home() {
-  const [authUser, setAuthUser] = useState(null);
   const [username, setUsername] = useState("");
   const [nationName, setNationName] = useState("");
   const [nationDenon, setNationDenon] = useState("");
 
   const dispatch = useDispatch();
   const {user, loading: authLoading, error} = useSelector(state => state.auth);
-  const {users, loading: usersLoading} = useSelector(state => state.user);
+  const {authUser, loading: usersLoading} = useSelector(state => state.user);
 
   useEffect(() => {
-    console.log("effect");
-    if (!usersLoading && users) {
-      console.log("if state");
-      const foundUser = users.find(u => u.id == user.user.id);
-      console.log("found", foundUser);
-      if (foundUser) {
-        setAuthUser(foundUser);
-        setUsername(foundUser.username);
-        setNationName(foundUser.nation_name);
-        setNationDenon(foundUser.nation_denonym);
-      }
+    if (authUser) {
+      setUsername(authUser.username);
+      setNationName(authUser.nation_name);
+      setNationDenon(authUser.nation_denonym);
     }
-  }, [users, usersLoading]);
-  console.log("all users", users);
-  console.log("authUser", authUser);
+  }, [authUser]);
 
+  // handlers
   const handleSignOut = () => {
     dispatch(signOut());
   };

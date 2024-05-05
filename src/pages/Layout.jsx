@@ -6,7 +6,8 @@ import {signOut} from "../features/authSlice";
 
 function Navbar() {
   const dispatch = useDispatch();
-  const {user, loading, error} = useSelector(state => state.auth);
+  const {user, loading: authLoading, error} = useSelector(state => state.auth);
+  const {authUser, loading: userLoading} = useSelector(state => state.user);
 
   function handleSignOut() {
     dispatch(signOut());
@@ -38,8 +39,11 @@ function Navbar() {
       </nav>
 
       <div>
-        {user ? (
-          <a onClick={handleSignOut}>Log out</a>
+        {user && authUser ? (
+          <>
+            <p>Irium: {authUser.irium}</p>
+            <a onClick={handleSignOut}>Log out</a>
+          </>
         ) : (
           <>
             <NavLink to="/register">Login</NavLink>
