@@ -102,6 +102,10 @@ export const getAuthUser = () => async dispatch => {
       data: {user},
     } = await supabase.auth.getUser();
 
+    if (!user) {
+      return;
+    }
+
     let {data, error} = await supabase
       .from("users")
       .select("*")
