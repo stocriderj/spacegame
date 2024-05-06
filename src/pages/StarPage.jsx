@@ -28,15 +28,15 @@ const StyledStarSystem = styled.div`
   }
 
   /* captions */
-  & .star-system-planet-owner {
-    font-size: 1rem;
-    letter-spacing: 1px;
-    text-decoration: underline;
-  }
   & .star-system-planet-name {
-    margin-top: -0.6rem;
     letter-spacing: 2px;
     font-size: 1.6rem;
+    text-decoration: underline;
+  }
+  & .star-system-planet-owner {
+    margin-top: -0.6rem;
+    font-size: 1rem;
+    letter-spacing: 1px;
   }
   & .star-system-empty-space .star-system-planet-name {
     font-size: 2.4rem;
@@ -76,14 +76,14 @@ function StarSystem({star, planets}) {
               </>
             )}
 
+            <p className="star-system-planet-name">{planet.name}</p>
+
             <div className="star-system-planet-details">
               {["Empty Space", "Space Dust"].indexOf(planet.type) < 0 && (
                 <p className="star-system-planet-owner">
                   {planet.users?.username || "Unclaimed"}
                 </p>
               )}
-
-              <p className="star-system-planet-name">{planet.name}</p>
             </div>
           </Link>
         ) : (
