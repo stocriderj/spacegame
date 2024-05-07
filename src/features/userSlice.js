@@ -95,6 +95,8 @@ export const getUsers = () => async dispatch => {
   }
 };
 
+
+// Auth user party (comes with subscriber function !!)
 export const getAuthUser = () => async dispatch => {
   dispatch(setLoading(true));
   try {
@@ -122,6 +124,23 @@ export const getAuthUser = () => async dispatch => {
     console.error(error);
   }
 };
+
+// function handleAuthUserUpdate(payload) {
+  
+// }
+
+// export const subscribeToAuthUserUpdates = userId => dispatch => {
+//   const subscription = supabase
+//     .from(`users:id=eq.${userId}`)
+//     .on("UPDATE", payload => {
+//       dispatch(setAuthUser(payload.new));
+//     })
+//     .subscribe();
+
+//   // Return the subscription handle if you need to unsubscribe later
+//   return subscription;
+// };
+
 
 /**
  * Accepts an object and updates the user

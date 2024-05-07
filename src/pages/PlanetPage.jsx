@@ -40,23 +40,21 @@ function Planet({star, planet, owner: ownerProp}) {
 
       <div className="planet-title">
         <h1>{planet.name}</h1>
-        {["Space Dust", "Empty Space"].indexOf(planet.type) < 0 && (
+        {planet.type !== "Space Dust" && (
           <h2>{ownerProp ? `Owner: ${owner?.username}` : "Unclaimed"}</h2>
         )}
       </div>
 
-      {planet.type != "Empty Space" && (
-        <img
-          className="planet-img"
-          src={planetImages[planet.type]}
-          alt="Image of the planet"
-        />
-      )}
+      <img
+        className="planet-img"
+        src={planetImages[planet.type]}
+        alt="Image of the planet"
+      />
 
       <ul>
         <li>Type: {planet.type}</li>
         {/* Doesn't display these for space dust and empty space */}
-        {["Space Dust", "Empty Space"].indexOf(planet.type) < 0 && (
+        {planet.type !== "Space Dust" && (
           <>
             <li>Atmospheric Pressure: {planet.pressure} pascals</li>
             <li>Radius: {planet.radius} km</li>

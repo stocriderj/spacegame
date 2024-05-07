@@ -10,7 +10,8 @@ import StarPage from "./pages/StarPage";
 import PlanetPage from "./pages/PlanetPage";
 
 import {signOut} from "./features/authSlice";
-import {updateUser} from "./features/userSlice";
+import {setAuthUser, updateUser} from "./features/userSlice";
+import supabase from "./supabase";
 
 function Home() {
   const [username, setUsername] = useState("");
@@ -96,9 +97,25 @@ function Home() {
 }
 
 function App() {
+  const dispatch = useDispatch();
   const {user, loading} = useSelector(state => state.auth);
-
   console.log("authenticated user", user);
+
+  useEffect(() => {
+    supabase
+      .channel("users")
+      .on(
+        "postgres_changes",
+        {event: "UPDATE", schema: "public", table: "users"},
+        payload => {
+          if (payload.new.id == user?.user.id) {
+            console.log("Change received - likely a game tick", payload);
+            dispatch(setAuthUser(payload.new));
+          }
+        }
+      )
+      .subscribe();
+  }, [dispatch]);
 
   return (
     <RouterProvider
