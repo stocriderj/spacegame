@@ -31,20 +31,6 @@ export default function FleetPage() {
           </ul>
         </div>
       ))}
-      {data.map(item => (
-        <div key={item.id + 14}>
-          <h2>{item.name}</h2>
-          <ul>
-            <li>{item.description}</li>
-            <li>{item.hull} HIMR</li>
-            <li>{item.attack} HIDR</li>
-            <li>{item.speed_warp} LM/s</li>
-            <li>{item.speed_cruise} Mm/s</li>
-            <li>{item.cost} Irium</li>
-            <li>{item?.storage} m3 storage</li>
-          </ul>
-        </div>
-      ))}
     </div>
   );
 }

@@ -125,22 +125,6 @@ export const getAuthUser = () => async dispatch => {
   }
 };
 
-// function handleAuthUserUpdate(payload) {
-  
-// }
-
-// export const subscribeToAuthUserUpdates = userId => dispatch => {
-//   const subscription = supabase
-//     .from(`users:id=eq.${userId}`)
-//     .on("UPDATE", payload => {
-//       dispatch(setAuthUser(payload.new));
-//     })
-//     .subscribe();
-
-//   // Return the subscription handle if you need to unsubscribe later
-//   return subscription;
-// };
-
 
 /**
  * Accepts an object and updates the user

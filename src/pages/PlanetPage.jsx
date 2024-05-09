@@ -3,8 +3,9 @@ import {useParams} from "react-router-dom";
 import styled from "styled-components";
 import {planetImages} from "../assets/images/imageHelpers";
 import {Link} from "../components/Links";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {fetchPlanets} from "../features/galaxySlice";
+import supabase from "../supabase";
 
 const StyledPlanet = styled.div`
   margin: 0 auto;
@@ -32,7 +33,87 @@ const StyledPlanet = styled.div`
 `;
 
 function Planet({star, planet, owner: ownerProp}) {
+  const [shipClasses, setShipClasses] = useState([]);
+  const [userCommands, setUserCommands] = useState([]);
+  const buildCommands = userCommands.filter(cmd => cmd.type === "shipbuilding");
+
+  useEffect(() => {
+    fetchShipClasses();
+    fetchUserCommands();
+
+    const channel = supabase
+      .channel("user_commands")
+      .on(
+        "postgres_changes",
+        {event: "INSERT", schema: "public", table: "user_commands"},
+        fetchUserCommands
+      )
+      .on(
+        "postgres_changes",
+        {event: "UPDATE", schema: "public", table: "user_commands"},
+        fetchUserCommands
+      )
+      .on(
+        "postgres_changes",
+        {event: "DELETE", schema: "public", table: "user_commands"},
+        fetchUserCommands
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  async function fetchShipClasses() {
+    const {data, error} = await supabase.from("ship_classes").select("*");
+    if (error) console.error("Error fetching ship classes:", error);
+    else setShipClasses(data);
+  }
+
+  async function fetchUserCommands() {
+    try {
+      const {data, error} = await supabase
+        .from("user_commands")
+        .select("*, ship_classes (*)")
+        .eq("planet_id", planet.id);
+
+      if (error) {
+        throw error;
+      }
+
+      setUserCommands(data);
+      // console.log("user commands:", data);
+    } catch (error) {
+      console.error("Failed to fetch user commands:", error);
+    }
+  }
+
   const owner = ownerProp ? ownerProp : {username: "Unclaimed"};
+  const {user, loading} = useSelector(state => state.auth);
+  const {authUser} = useSelector(state => state.user);
+
+  async function handleBuildShipCommand(ship) {
+    if (authUser.irium >= ship.cost) {
+      try {
+        const {error} = await supabase.from("user_commands").insert({
+          user_id: user.user.id,
+          type: "shipbuilding",
+          // tick time is handled server-side
+          ship_class_id: ship.id,
+          planet_id: planet.id,
+        });
+
+        if (error) {
+          throw error;
+        }
+      } catch (error) {
+        console.error("Failed to add ship to build queue:", error);
+      }
+    } else {
+      alert("There's no way you can afford that, brokey");
+    }
+  }
 
   return (
     <StyledPlanet>
@@ -62,6 +143,45 @@ function Planet({star, planet, owner: ownerProp}) {
         )}
         <li>Iridite: {planet.iridite}</li>
       </ul>
+
+      {owner?.id === user?.user.id && (
+        <div>
+          <h2>Shipyard build queue</h2>
+          <ul>
+            {buildCommands.length ? (
+              buildCommands.map(command => (
+                <li key={command.id}>
+                  Building {command.ship_classes.name} (
+                  {command.ticks_until_resolution} starminutes left)
+                </li>
+              ))
+            ) : (
+              <p>The lazy shipbuilders are taking a snooze &#128564;</p>
+            )}
+          </ul>
+
+          <h2>Build ships</h2>
+          <ul>
+            {shipClasses.map(ship => (
+              <li key={ship.id}>
+                <h3>{ship.name}</h3>
+                <ul>
+                  <li>{ship.description}</li>
+                  <li>{ship.hull} HIMR (hull points)</li>
+                  <li>{ship.attack} HIDR (attack)</li>
+                  <li>{ship.speed_warp} LM/s (warp speed)</li>
+                  <li>{ship.speed_cruise} Mm/s (cruise speed)</li>
+                  <li>{ship.cost} Irium</li>
+                  <li>{ship?.storage} m3 storage</li>
+                </ul>
+                <button onClick={() => handleBuildShipCommand(ship)}>
+                  Build {ship.name} ({ship.build_time} starminutes)
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </StyledPlanet>
   );
 }
@@ -95,7 +215,7 @@ export default function PlanetPage() {
 
   return (
     <div className="container">
-      {planet ? (
+      {star && planet ? (
         <Planet star={star} planet={planet} owner={planet.users} />
       ) : (
         <div>Planet not found</div>

@@ -102,20 +102,30 @@ function App() {
   console.log("authenticated user", user);
 
   useEffect(() => {
-    supabase
+    // console.log(user);
+
+    const channel = supabase
       .channel("users")
       .on(
         "postgres_changes",
         {event: "UPDATE", schema: "public", table: "users"},
         payload => {
+          console.log("User change received.");
           if (payload.new.id == user?.user.id) {
-            console.log("Change received - likely a game tick", payload);
+            console.log(
+              "Authenticated user change received - likely a game tick",
+              payload
+            );
             dispatch(setAuthUser(payload.new));
           }
         }
       )
       .subscribe();
-  }, [dispatch]);
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, dispatch]);
 
   return (
     <RouterProvider

@@ -101,7 +101,7 @@ export default function StarPage() {
 
   const star = stars ? stars.find(star => star.id == starId) : null;
   const planets =
-    star?.id === fetchedPlanets?.starId && fetchedPlanets
+    star?.id == fetchedPlanets?.starId
       ? Array.from(
           {length: 8},
           (_, i) => fetchedPlanets.planets.find(p => p.orbit === i) || null
@@ -110,6 +110,7 @@ export default function StarPage() {
 
   // FETCH PLANETS
   useEffect(() => {
+    // console.log("fetched planets", fetchedPlanets);
     if (star && star?.id != fetchedPlanets?.starId)
       dispatch(fetchPlanets(star.id));
   }, [dispatch, star, fetchedPlanets]);
