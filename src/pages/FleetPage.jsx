@@ -1,12 +1,19 @@
 import React, {useEffect, useState} from "react";
 import supabase from "../supabase";
+import { useSelector } from "react-redux";
 
 export default function FleetPage() {
+  const {user} = useSelector(state => state.auth)
+  
   const [data, setData] = useState([]);
+  const [userShips, setUserShips] = useState([]);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (user) {
+      fetchData();
+      fetchUserShips();
+    }
+  }, [user]);
 
   const fetchData = async () => {
     const {data, error} = await supabase.from("ship_classes").select("*");
@@ -14,6 +21,13 @@ export default function FleetPage() {
     else setData(data);
     console.log(data);
   };
+
+  async function fetchUserShips() {
+    const {data, error} = await supabase.from("ships").select("*").eq("user_id", user.user.id);
+    if (error) console.log("Error fetchin user ships:", error);
+    else setUserShips(data);
+    console.log("user ships", data);
+  }
 
   return (
     <div className="container">
