@@ -3,8 +3,9 @@ import {useParams} from "react-router-dom";
 import styled from "styled-components";
 import {planetImages, starImages} from "../assets/images/imageHelpers";
 import {Link} from "../components/Links";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {fetchPlanets} from "../features/galaxySlice";
+import supabase from "../supabase";
 
 const StyledStarSystem = styled.div`
   margin: 0 auto;
@@ -44,12 +45,20 @@ const StyledStarSystem = styled.div`
   }
 `;
 
+const StyledShipsPanel = styled.div`
+  position: fixed;
+  right: 2.4rem;
+  bottom: 2.4rem;
+`;
+
 function StarSystem({star, planets}) {
-  console.log(star, planets);
   return (
     <StyledStarSystem>
       <Link to="/game/map">&larr; Back to map</Link>
       <h1>{star.name}</h1>
+      <p>
+        ({star.x_coord}, {star.y_coord})
+      </p>
 
       <img
         className="star-system-star"
@@ -93,27 +102,42 @@ function StarSystem({star, planets}) {
 export default function StarPage() {
   const dispatch = useDispatch();
 
+  const [ships, setShips] = useState([]);
+
   const {starId} = useParams();
 
   const {stars, fetchedPlanets, loading, error} = useSelector(
     state => state.galaxy
   );
+  const {authUser} = useSelector(state => state.user);
 
   const star = stars ? stars.find(star => star.id == starId) : null;
   const planets =
     star?.id == fetchedPlanets?.starId
       ? Array.from(
           {length: 8},
-          (_, i) => fetchedPlanets.planets.find(p => p.orbit === i) || null
+          (_, i) => fetchedPlanets?.planets.find(p => p.orbit === i + 1) || null
         )
       : null;
 
-  // FETCH PLANETS
+  // FETCH
   useEffect(() => {
     // console.log("fetched planets", fetchedPlanets);
-    if (star && star?.id != fetchedPlanets?.starId)
-      dispatch(fetchPlanets(star.id));
+    if (star) {
+      if (star?.id != fetchedPlanets?.starId) dispatch(fetchPlanets(star.id));
+      else fetchShips();
+    }
   }, [dispatch, star, fetchedPlanets]);
+
+  async function fetchShips() {
+    const {data, error} = await supabase
+      .from("ships")
+      .select("*, ship_classes(*)")
+      .eq("x_coord", star?.x_coord)
+      .eq("y_coord", star?.y_coord);
+    if (error) console.log("Error fetching system ships:", error);
+    else setShips(data);
+  }
 
   console.log(star, planets);
 
@@ -129,7 +153,17 @@ export default function StarPage() {
           <p>Hint: {error.hint || "none"}</p>
         </>
       ) : star && planets ? (
-        <StarSystem star={star} planets={planets} />
+        <>
+          <StarSystem star={star} planets={planets} />
+          <StyledShipsPanel>
+            <h2>Ships in system</h2>
+            {ships.map(ship => (
+              <div>
+                {ship.name} - {ship.ship_classes.name}
+              </div>
+            ))}
+          </StyledShipsPanel>
+        </>
       ) : (
         <div>Star not found</div>
       )}

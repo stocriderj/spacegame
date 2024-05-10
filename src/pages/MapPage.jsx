@@ -57,14 +57,15 @@ export default function MapPage() {
 
       {stars.map(star => (
         <Marker
-          position={[star.coordinates.y * 0.86, star.coordinates.x * 1.8]}
+          position={[star.y_coord * 0.86, star.x_coord * 1.8]}
+          // magic numbers 0_0
           icon={starIcons[star.color]}
           key={star.id}
         >
           <Popup>
             <p>{star.name}</p>
             <p>
-              ({star.coordinates.x}, {star.coordinates.y})
+              ({star.x_coord}, {star.y_coord})
             </p>
             <p>
               <Link to={`/game/star/${star.id}`}>Click</Link>

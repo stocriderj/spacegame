@@ -15,12 +15,6 @@ body {
   color: #f8ffff;
 }
 
-@media (max-width: 600px) {
-  body {
-    font-size: 1rem;
-  }
-}
-
 #root {
   display: grid;
   grid-template-columns: min(200px, max(25%, 100px)) 1fr;
@@ -55,3 +49,63 @@ main.main {
   font-weight: <weight>;
   font-style: normal;
 } */
+
+
+.fleet-shiplist {
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.2rem;
+  /* min-width: 20rem; */
+}
+
+.fleet-shiplist-ship {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+  text-align: center;
+
+  padding: 1rem;
+  background-color: #081520;
+  border-radius: 10px;
+}
+
+.fleet-shiplist-ship-name {
+  letter-spacing: 2px;
+  line-height: 20px;
+  line-break: anywhere;
+  hyphens: auto;
+}
+
+.fleet-shiplist-ship-class {
+  /* margin-top: -0.6rem; */
+  letter-spacing: 1px;
+}
+
+.fleet-shiplist progress {
+  width: 75%;
+  /* min-width: 4.8rem; */
+}
+
+
+
+
+
+
+/* @MEDIA */
+@media (max-width: 900px) {
+  .fleet-shiplist {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 1rem;
+  }
+
+  .fleet-shiplist {
+    grid-template-columns: 1fr;
+  }
+}
+

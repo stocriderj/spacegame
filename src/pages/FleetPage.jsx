@@ -1,16 +1,14 @@
 import React, {useEffect, useState} from "react";
 import supabase from "../supabase";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 
 export default function FleetPage() {
-  const {user} = useSelector(state => state.auth)
-  
-  const [data, setData] = useState([]);
+  const {user} = useSelector(state => state.auth);
+
   const [userShips, setUserShips] = useState([]);
 
   useEffect(() => {
     if (user) {
-      fetchData();
       fetchUserShips();
     }
   }, [user]);
@@ -23,28 +21,40 @@ export default function FleetPage() {
   };
 
   async function fetchUserShips() {
-    const {data, error} = await supabase.from("ships").select("*").eq("user_id", user.user.id);
-    if (error) console.log("Error fetchin user ships:", error);
+    const {data, error} = await supabase
+      .from("ships")
+      .select("*, ship_classes(*)")
+      .eq("user_id", user.user.id);
+    if (error) console.log("Error fetching user ships:", error);
     else setUserShips(data);
     console.log("user ships", data);
   }
 
   return (
     <div className="container">
-      {data.map(item => (
-        <div key={item.id}>
-          <h2>{item.name}</h2>
-          <ul>
-            <li>{item.description}</li>
-            <li>{item.hull} HIMR</li>
-            <li>{item.attack} HIDR</li>
-            <li>{item.speed_warp} LM/s</li>
-            <li>{item.speed_cruise} Mm/s</li>
-            <li>{item.cost} Irium</li>
-            <li>{item?.storage} m3 storage</li>
-          </ul>
-        </div>
-      ))}
+      <div>
+        <h2>Ships</h2>
+        <ul className="fleet-shiplist">
+          {userShips.map(ship => (
+            <li key={ship.id} className="fleet-shiplist-ship">
+              <h3 className="fleet-shiplist-ship-name">{ship.name}</h3>
+              <p className="fleet-shiplist-ship-class">
+                <u>{ship.ship_classes.name}</u> at ({ship.coordinates.x},{" "}
+                {ship.coordinates.y}), o-{ship.orbit}
+              </p>
+
+              <progress
+                min="0"
+                max={ship.ship_classes.hull}
+                value={ship.hull}
+              ></progress>
+              <p>
+                HULL: {ship.hull}/{ship.ship_classes.hull}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

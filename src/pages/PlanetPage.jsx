@@ -18,6 +18,7 @@ const StyledPlanet = styled.div`
     position: relative;
     top: 0;
     width: 100%;
+    max-width: 36rem;
   }
 
   & .planet-title {
@@ -76,7 +77,8 @@ function Planet({star, planet, owner: ownerProp}) {
       const {data, error} = await supabase
         .from("user_commands")
         .select("*, ship_classes (*)")
-        .eq("planet_id", planet.id);
+        .eq("planet_id", planet.id)
+        .order("created_at", {ascending: true});
 
       if (error) {
         throw error;
@@ -167,8 +169,8 @@ function Planet({star, planet, owner: ownerProp}) {
                 <h3>{ship.name}</h3>
                 <ul>
                   <li>{ship.description}</li>
-                  <li>{ship.hull} HIMR (hull points)</li>
-                  <li>{ship.attack} HIDR (attack)</li>
+                  <li>{ship.hull} hull</li>
+                  <li>{ship.attack} attack</li>
                   <li>{ship.speed_warp} LM/s (warp speed)</li>
                   <li>{ship.speed_cruise} Mm/s (cruise speed)</li>
                   <li>{ship.cost} Irium</li>
@@ -201,7 +203,7 @@ export default function PlanetPage() {
   const planets = fetchedPlanets?.planets;
   const planet = planets
     ? planets.find(
-        planet => planet.star_id == starId && planet.orbit == orbitId - 1
+        planet => planet.star_id == starId && planet.orbit == orbitId
       )
     : null;
 
